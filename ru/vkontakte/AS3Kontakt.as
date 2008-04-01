@@ -11,14 +11,14 @@ package ru.vkontakte
 	
 	public class AS3Kontakt
 	{
-		private var app:Application;
+		private var app_params:Object;
 		private var api_id:int;
 		private var api_secret:String;
 		private var test_mode:Boolean;
 		
-		public function AS3Kontakt(app:Application, api_id:int, api_secret:String, test_mode:Boolean) 
+		public function AS3Kontakt(app_params:Object, api_id:int, api_secret:String, test_mode:Boolean) 
 		{
-			this.app = app;
+			this.app_params = app_params;
 			this.api_id = api_id;
 			this.api_secret = api_secret;
 			this.test_mode = test_mode;
@@ -26,17 +26,17 @@ package ru.vkontakte
 		
 		public function get viewer_id(): int
 		{
-			return Number(app.parameters.viewer_id);
+			return Number(app_params.viewer_id);
 		}
 
 		public function get user_id(): int
 		{
-			return Number(app.parameters.user_id);
+			return Number(app_params.user_id);
 		}
 
 		public function get group_id(): int
 		{
-			return Number(app.parameters.group_id);
+			return Number(app_params.group_id);
 		}
 		
 		public function get me():Boolean
