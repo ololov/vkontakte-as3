@@ -113,9 +113,9 @@ package ru.vkontakte
 			this.execute(params, cb);
 		}
 
-		public function getUserInfo(cb:Function):void
+		public function getUserInfo(user_id:int, cb:Function):void
 		{
-			var params:Object = {method: 'getUserInfo'};
+			var params:Object = {method: 'getUserInfo', user_id : String(user_id)};
 			this.execute(params, cb);
 		}
 		
