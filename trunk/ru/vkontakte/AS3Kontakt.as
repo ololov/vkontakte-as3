@@ -1,7 +1,5 @@
 package ru.vkontakte
 {
-	import ru.vkontakte.MD5;
-	
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
@@ -96,5 +94,30 @@ package ru.vkontakte
 			var params:Object = {method: 'getVariable', key: String(key), user_id : String(user_id)};
 			this.execute(params, cb);
 		}
+		
+		public function getHighScores(cb:Function):void
+		{
+			var params:Object = {method: 'getHighScores'};
+			this.execute(params, cb);
+		}
+		
+		public function setHighScore(score:int, cb:Function):void
+		{
+			var params:Object = {method: 'getHighScores', score: String(score)};
+			this.execute(params, cb);
+		}
+		
+		public function getServerTime(cb:Function):void
+		{
+			var params:Object = {method: 'getServerTime'};
+			this.execute(params, cb);
+		}
+
+		public function getUserInfo(cb:Function):void
+		{
+			var params:Object = {method: 'getUserInfo'};
+			this.execute(params, cb);
+		}
+		
 	}
 }
