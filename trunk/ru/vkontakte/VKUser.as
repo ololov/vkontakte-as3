@@ -9,7 +9,7 @@ package ru.vkontakte
 		// set user_id to zero to specify own instance 
 		{
 			m_app = app;
-			m_id = id;
+			m_id = user_id;
 		}
 		
 		public function get id() : int
