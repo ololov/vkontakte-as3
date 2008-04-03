@@ -55,7 +55,7 @@ package ru.vkontakte
 		
 		public function get viewer() : VKUser
 		{
-			return this.get_user(m_viewer_id);
+			return this.get_user(0); //m_viewer_id);
 		}
 		
 		public function get viewer_id(): int
