@@ -26,6 +26,16 @@ package ru.vkontakte
 			m_test_mode = test_mode;
 		}
 
+		public function get_session(session:int) : VKSession
+		{
+			return new VKSession(this, session);
+		}
+		
+		public function get session() : VKSession
+		{
+			return this.get_session(0);
+		}
+		
 		public function get_user(user_id:int): VKUser
 		{
 			return new VKUser(this, user_id);
