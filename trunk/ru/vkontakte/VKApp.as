@@ -7,41 +7,58 @@ package ru.vkontakte
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
-	import mx.core.Application;
-	
-	public class AS3Kontakt
+	public class VKApp
 	{
-		private var app_params:Object;
-		private var api_id:int;
-		private var api_secret:String;
-		private var test_mode:Boolean;
+		private var m_user_id:int;
+		private var m_viewer_id:int;
+		private var m_group_id:int;
+		private var m_api_id:int;
+		private var m_api_secret:String;
+		private var m_test_mode:Boolean;
 		
-		public function AS3Kontakt(app_params:Object, api_id:int, api_secret:String, test_mode:Boolean) 
+		public function VKApp(app_params:Object, api_id:int, api_secret:String, test_mode:Boolean) 
 		{
-			this.app_params = app_params;
-			this.api_id = api_id;
-			this.api_secret = api_secret;
-			this.test_mode = test_mode;
+			m_user_id = Number(app_params.user_id);
+			m_viewer_id = Number(app_params.viewer_id);
+			m_group_id = Number(app_params.group_id);
+			m_api_id = api_id;
+			m_api_secret = api_secret;
+			m_test_mode = test_mode;
+		}
+
+		public function get_user(user_id:int): VKUser
+		{
+			return new VKUser(this, user_id);
+		}		
+		
+		public function get user(): VKUser
+		{
+			return this.get_user(m_user_id);
+		}
+		
+		public function get viewer() : VKUser
+		{
+			return this.get_user(m_viewer_id);
 		}
 		
 		public function get viewer_id(): int
 		{
-			return Number(app_params.viewer_id);
+			return m_viewer_id;
 		}
 
 		public function get user_id(): int
 		{
-			return Number(app_params.user_id);
+			return m_user_id;
 		}
 
 		public function get group_id(): int
 		{
-			return Number(app_params.group_id);
+			return m_group_id;
 		}
 		
 		public function get me():Boolean
 		{
-			return ((this.user_id == this.viewer_id) || ((this.user_id == 0) && (this.group_id == 0)));
+			return ((m_user_id == m_viewer_id) || ((m_user_id == 0) && (m_group_id == 0)));
 		}
 		
 		private function signature(params:Object):String 
@@ -53,14 +70,14 @@ package ru.vkontakte
 			var sig:String = String(this.viewer_id);			
 			for (var i:int = 0; i < keys.length; i++)
 				sig = sig + keys[i] + "=" + params[keys[i]];
-			sig = sig + this.api_secret;
+			sig = sig + m_api_secret;
 			return MD5.encrypt(sig);
 		}
 		
 		public function execute(params:Object, cb:Function):void
 		{
-			params.api_id = String(api_id);
-			if (test_mode)
+			params.api_id = String(m_api_id);
+			if (m_test_mode)
 				params.test_mode = "1";
 			params.sig = signature(params);
 			var request:URLRequest = new URLRequest("http://api.vkontakte.ru/api.php");
@@ -79,22 +96,18 @@ package ru.vkontakte
 		
 		public function getVariable(key:int, cb:Function):void
 		{
+			if (key >= 1024) trace("WARNING: Application variables range 0-1023");
 			var params:Object = {method: 'getVariable', key: String(key)};
 			this.execute(params, cb);
 		}
 
 		public function putVariable(key:int, value:String, cb:Function):void
 		{
+			if (key >= 1024) trace("WARNING: Application variables range 0-1023");
 			var params:Object = {method: 'putVariable', key: String(key), value: value};
 			this.execute(params, cb);
 		}
 
-		public function getUserVariable(user_id:int, key:int, cb:Function):void
-		{
-			var params:Object = {method: 'getVariable', key: String(key), user_id : String(user_id)};
-			this.execute(params, cb);
-		}
-		
 		public function getHighScores(cb:Function):void
 		{
 			var params:Object = {method: 'getHighScores'};
@@ -107,17 +120,17 @@ package ru.vkontakte
 			this.execute(params, cb);
 		}
 		
+		public function setMaxScores(max_scores:int, cb:Function) : void
+		{
+			this.putVariable(17, String(max_scores), cb);
+		}
+		
 		public function getServerTime(cb:Function):void
 		{
 			var params:Object = {method: 'getServerTime'};
 			this.execute(params, cb);
 		}
 
-		public function getUserInfo(user_id:int, cb:Function):void
-		{
-			var params:Object = {method: 'getUserInfo', user_id : String(user_id)};
-			this.execute(params, cb);
-		}
 		
 	}
 }
