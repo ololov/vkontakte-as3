@@ -15,9 +15,11 @@ package ru.vkontakte
 		private var m_api_id:int;
 		private var m_api_secret:String;
 		private var m_test_mode:Boolean;
+		private var m_valid:Boolean;
 		
 		public function VKApp(app_params:Object, api_id:int, api_secret:String, test_mode:Boolean) 
 		{
+			m_valid = (Number(app_params.api_id) == api_id); 
 			m_user_id = Number(app_params.user_id);
 			m_viewer_id = Number(app_params.viewer_id);
 			m_group_id = Number(app_params.group_id);
@@ -26,6 +28,11 @@ package ru.vkontakte
 			m_test_mode = test_mode;
 		}
 
+		public function get is_valid() : Boolean
+		{
+			return m_valid;
+		}
+		
 		public function get_session(session:int) : VKSession
 		{
 			return new VKSession(this, session);
@@ -140,7 +147,5 @@ package ru.vkontakte
 			var params:Object = {method: 'getServerTime'};
 			this.execute(params, cb);
 		}
-
-		
 	}
 }
